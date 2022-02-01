@@ -1,0 +1,153 @@
+#these are the available sizes to use.
+list_of_rings = [160, 172.5, 205, 210, 237.5, 248, 270, 280, 292, 302.5, 335, 350, 367.5, 380, 400, 424, 450, 468, 512, 556, 600, 140]
+list_of_rings.sort()
+
+#Remove print function from final version.
+#If you want to check that the list of rings works properly then just remove 
+#the hashtag symbol before print.
+
+#print (list_of_rings)
+
+
+#This function finds the smallest and largest rings.
+#To test them simply remove the hashtag infront of print.
+
+#print("The smallest ring is:", min(list_of_rings))
+smallest_ring = min(list_of_rings)
+
+
+#print("The largest ring is:", max(list_of_rings))
+largest_ring = max(list_of_rings)
+
+#Print the smallest possible choice, and also a list of all the options available. Take the user input and save is as designers_smallest_choice.
+
+print("The smallest ring you can choose is", smallest_ring, "millimeters.")
+print("You can choose from the following sizes.")
+print()
+print(*list_of_rings, sep=", ")
+print()
+designers_smallest_ring = float(input("Please enter the size of the smallest ring you want to use: "))
+
+#Check if the ring size is in the list, else ask for a new input
+exist_count = list_of_rings.count(designers_smallest_ring)
+ 
+while exist_count == 0:
+  print("No,", designers_smallest_ring,"does not exists in list. Please choose again.")
+  designers_smallest_ring = float(input("Please enter the size of the smallest ring you want to use: "))
+  exist_count = list_of_rings.count(designers_smallest_ring)
+  if exist_count > 0:
+    print(designers_smallest_ring, "millimeters exists.")
+    break
+
+#print the result.
+print("Your smallest ring will be",designers_smallest_ring, "millimeters")
+
+#this just tells you what options you have
+
+print("The smallest size you chose was", designers_smallest_ring, "millimeters so please choose a value larger than that.")
+print("The largest ring you can choose is", largest_ring, "millimeters")
+print()
+print("You can choose from the following sizes.")
+print()
+print(*list_of_rings, sep=", ")
+print()
+designers_largest_ring = float(input("Please enter the size of the largest ring you want to use: "))
+
+
+# check it the ring size is in the list.
+#Is there need for a function **here** to add new sizes? 
+exist_count = list_of_rings.count(designers_largest_ring)
+
+
+#This checks if the ring is in the list of accepted rings, and repeats the question until it is.
+while exist_count == 0:
+  print("Unfortunately,", designers_largest_ring,"is not a possible option. Please choose again.")
+  designers_largest_ring = float(input("Please enter the size of the largest ring you want to use: "))
+  exist_count = list_of_rings.count(designers_largest_ring)
+  if exist_count > 0:
+    if designers_largest_ring < designers_smallest_ring:
+      print("Please choose a size larger than",designers_smallest_ring)
+      exist_count = 0
+    else:
+      print(designers_largest_ring, "millimeters exists.")
+      break
+
+#print the result.
+print("Your largest ring will be",designers_largest_ring, "millimeters")
+
+
+#simply adds the size between the rings, no right or wrong answers are possible here.
+
+space_between = float(input("Please enter the size you want between each ring: "))
+print("Your design will have", space_between, "millimeters between each ring.")
+
+
+print("Do you want the design to be shaped as ball?")
+print("If that is the desired shape then enter how many millimeters should be between the largest ring")
+print("and the one preceeding it. Your largest choice was", designers_largest_ring, "mm.")
+print("If you don't want a ball shape just enter 0.")
+
+ball_shape = float(input("Please enter the size you want between the last ring and the one preceeding it:"))
+
+
+#These are just here for troubleshooting, don't touch them!
+#list_of_rings = [160, 172.5, 205, 210, 237.5, 248, 270, 280, 292, 302.5, 335, 350, 367.5, 380, 400, 424, 450, 468, 512, 556, 600, 140]
+#list_of_rings.sort()
+#designers_smallest_ring = 248
+#designers_largest_ring = 556
+#space_between = 50
+
+
+while min(list_of_rings) < designers_smallest_ring:
+  list_of_rings.pop(0)
+while max(list_of_rings) > designers_largest_ring:
+  list_of_rings.pop()
+
+
+new_list = []
+
+
+comperative_size = list_of_rings[0]
+#This counts the amount of rings that meet the criteria.
+for x in list_of_rings:
+
+  if x > comperative_size:
+    new_list.append(x)
+    comperative_size = x + space_between
+
+  elif x >= comperative_size - 5:
+    new_list.append(x)
+    comperative_size = x + space_between
+
+
+if ball_shape <= 0:
+  print("These sizes fits your criteria:")
+  print(*new_list, sep=" , ")
+  ring_count = len(new_list)
+  print("You can add up to", ring_count,"rings to your design.")
+
+#this will reverse the list so that the ball shape will be possible.
+rev_list = reversed(new_list)
+
+#This is for the ball shape.
+if ball_shape > 0:
+  rev_comp_size = designers_largest_ring 
+  i = 0
+  for x in rev_list:
+    if x == rev_comp_size:
+      print(x)
+      x = rev_comp_size
+      rev_comp_size = x - ball_shape
+      i +=1 
+    elif x < rev_comp_size:
+      print(x)
+      rev_comp_size = x - space_between
+      i +=1
+    elif x <= rev_comp_size + 5:
+      print(x)
+      rev_comp_size = x - space_between
+      i +=1 
+
+  ball_shape_count = i
+
+  print("For a ball shape you can add up to", ball_shape_count,"rings")
